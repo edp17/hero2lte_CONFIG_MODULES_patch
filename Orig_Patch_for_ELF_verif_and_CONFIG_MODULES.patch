@@ -280,18 +280,7 @@
  const char *const pkey_algo_name[PKEY_ALGO__LAST] = {
  	[PKEY_ALGO_DSA]		= "DSA",
  	[PKEY_ALGO_RSA]		= "RSA",
-diff --git a/drivers/Makefile b/drivers/Makefile
-index fdf80188b4a..228be4baef2 100644
---- a/drivers/Makefile
-+++ b/drivers/Makefile
-@@ -110,7 +110,6 @@ obj-$(CONFIG_HWMON)		+= hwmon/
- obj-$(CONFIG_THERMAL)		+= thermal/
- obj-$(CONFIG_WATCHDOG)		+= watchdog/
- obj-$(CONFIG_MD)		+= md/
--obj-$(CONFIG_BT)		+= bluetooth/
- obj-$(CONFIG_ACCESSIBILITY)	+= accessibility/
- obj-$(CONFIG_ISDN)		+= isdn/
- obj-$(CONFIG_EDAC)		+= edac/
+
 diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
 index 9964f70be98..89ac657e67a 100644
 --- a/drivers/acpi/osl.c
