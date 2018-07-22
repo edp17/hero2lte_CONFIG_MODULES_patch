@@ -1,0 +1,1908 @@
+--- a/arch/arm/kernel/vmlinux.lds.S
++++ b/arch/arm/kernel/vmlinux.lds.S
+@@ -82,6 +82,7 @@ SECTIONS
+ #endif
+ 		*(.discard)
+ 		*(.discard.*)
++		*(.ARM.exidx.discard)
+ 	}
+ 
+ #ifdef CONFIG_XIP_KERNEL
+--- a/arch/arm64/configs/exynos8890-hero2lte_defconfig
++++ b/arch/arm64/configs/exynos8890-hero2lte_defconfig
+@@ -185,7 +185,7 @@ CONFIG_SLUB_DEBUG_LIGHT=y
+ CONFIG_SLUB=y
+ # CONFIG_SLOB is not set
+ CONFIG_SLUB_CPU_PARTIAL=y
+-# CONFIG_SYSTEM_TRUSTED_KEYRING is not set
++CONFIG_SYSTEM_TRUSTED_KEYRING=y
+ CONFIG_DEFERRED_INITCALLS=y
+ CONFIG_PROFILING=y
+ CONFIG_TRACEPOINTS=y
+@@ -231,7 +231,14 @@ CONFIG_COMPAT_OLD_SIGACTION=y
+ CONFIG_HAVE_GENERIC_DMA_COHERENT=y
+ CONFIG_RT_MUTEXES=y
+ CONFIG_BASE_SMALL=0
+-# CONFIG_MODULES is not set
++CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
++# CONFIG_MODVERSIONS is not set
++# CONFIG_MODULE_SRCVERSION_ALL is not set
++# CONFIG_MODULE_SIG is not set
++# CONFIG_MODULE_COMPRESS is not set
+ CONFIG_STOP_MACHINE=y
+ CONFIG_BLOCK=y
+ # CONFIG_BLK_DEV_BSG is not set
+@@ -273,6 +280,7 @@ CONFIG_IOSCHED_CFQ=y
+ CONFIG_DEFAULT_CFQ=y
+ # CONFIG_DEFAULT_NOOP is not set
+ CONFIG_DEFAULT_IOSCHED="cfq"
++CONFIG_ASN1=y
+ CONFIG_UNINLINE_SPIN_UNLOCK=y
+ CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
+ CONFIG_MUTEX_SPIN_ON_OWNER=y
+@@ -427,6 +435,7 @@ CONFIG_CMDLINE=""
+ # Userspace binary formats
+ #
+ CONFIG_BINFMT_ELF=y
++CONFIG_BINFMT_ELF_SIG=y
+ CONFIG_COMPAT_BINFMT_ELF=y
+ CONFIG_ARCH_BINFMT_ELF_RANDOMIZE_PIE=y
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+@@ -924,6 +933,7 @@ CONFIG_XPS=y
+ # CONFIG_CGROUP_NET_CLASSID is not set
+ CONFIG_NET_RX_BUSY_POLL=y
+ CONFIG_BQL=y
++# CONFIG_BPF_JIT is not set
+ CONFIG_NET_FLOW_LIMIT=y
+ 
+ #
+@@ -1315,6 +1325,7 @@ CONFIG_DM_CRYPT=y
+ # CONFIG_DM_UEVENT is not set
+ # CONFIG_DM_FLAKEY is not set
+ CONFIG_DM_VERITY=y
++# CONFIG_DM_ANDROID_VERITY is not set
+ # CONFIG_DM_VERITY_FEC is not set
+ # CONFIG_DM_SWITCH is not set
+ # CONFIG_DM_LOG_WRITES is not set
+@@ -1882,6 +1893,7 @@ CONFIG_EXYRNG_FIPS_COMPLIANCE=y
+ # CONFIG_EXYRNG_FAIL_POLICY_DISABLE is not set
+ CONFIG_EXYRNG_FAIL_POLICY_RESET=y
+ CONFIG_EXYRNG_USE_CRYPTOMANAGER=y
++CONFIG_HW_RANDOM_TPM=y
+ # CONFIG_R3964 is not set
+ # CONFIG_APPLICOM is not set
+ 
+@@ -1889,7 +1901,12 @@ CONFIG_EXYRNG_USE_CRYPTOMANAGER=y
+ # PCMCIA character devices
+ #
+ # CONFIG_RAW_DRIVER is not set
+-# CONFIG_TCG_TPM is not set
++CONFIG_TCG_TPM=y
++# CONFIG_TCG_TIS_I2C_ATMEL is not set
++# CONFIG_TCG_TIS_I2C_INFINEON is not set
++# CONFIG_TCG_TIS_I2C_NUVOTON is not set
++# CONFIG_TCG_ATMEL is not set
++# CONFIG_TCG_ST33_I2C is not set
+ CONFIG_DEVPORT=y
+ # CONFIG_XILLYBUS is not set
+ 
+@@ -1965,6 +1982,7 @@ CONFIG_HAVE_S3C2410_I2C=y
+ #
+ # Other I2C/SMBus bus drivers
+ #
++# CONFIG_I2C_STUB is not set
+ # CONFIG_I2C_DEBUG_CORE is not set
+ # CONFIG_I2C_DEBUG_ALGO is not set
+ # CONFIG_I2C_DEBUG_BUS is not set
+@@ -3618,11 +3636,15 @@ CONFIG_DMA_OF=y
+ #
+ CONFIG_STAGING=y
+ # CONFIG_PRISM2_USB is not set
++# CONFIG_COMEDI is not set
++# CONFIG_RTL8192U is not set
++# CONFIG_RTLLIB is not set
+ # CONFIG_R8712U is not set
+ # CONFIG_R8188EU is not set
+ # CONFIG_R8723AU is not set
+ # CONFIG_RTS5208 is not set
+ # CONFIG_LINE6_USB is not set
++# CONFIG_VT6655 is not set
+ 
+ #
+ # IIO staging drivers
+@@ -3746,6 +3768,8 @@ CONFIG_ION_EXYNOS_OF=y
+ # CONFIG_FIQ_WATCHDOG is not set
+ # CONFIG_USB_WPAN_HCD is not set
+ # CONFIG_WIMAX_GDM72XX is not set
++# CONFIG_LTE_GDM724X is not set
++# CONFIG_LUSTRE_FS is not set
+ # CONFIG_DGNC is not set
+ # CONFIG_DGAP is not set
+ # CONFIG_GS_FPGABOOT is not set
+@@ -4572,11 +4596,16 @@ CONFIG_BRANCH_PROFILE_NONE=y
+ # CONFIG_TEST_LIST_SORT is not set
+ # CONFIG_BACKTRACE_SELF_TEST is not set
+ # CONFIG_RBTREE_TEST is not set
++# CONFIG_INTERVAL_TREE_TEST is not set
++# CONFIG_PERCPU_TEST is not set
+ CONFIG_ATOMIC64_SELFTEST=y
+ # CONFIG_TEST_STRING_HELPERS is not set
+ # CONFIG_TEST_KSTRTOX is not set
+ # CONFIG_TEST_RHASHTABLE is not set
+ # CONFIG_DMA_API_DEBUG is not set
++# CONFIG_TEST_LKM is not set
++# CONFIG_TEST_USER_COPY is not set
++# CONFIG_TEST_BPF is not set
+ # CONFIG_TEST_FIRMWARE is not set
+ # CONFIG_TEST_UDELAY is not set
+ # CONFIG_SAMPLES is not set
+@@ -4586,6 +4615,7 @@ CONFIG_HAVE_ARCH_KGDB=y
+ # CONFIG_STRICT_DEVMEM is not set
+ # CONFIG_PID_IN_CONTEXTIDR is not set
+ # CONFIG_ARM64_RANDOMIZE_TEXT_OFFSET is not set
++# CONFIG_DEBUG_SET_MODULE_RONX is not set
+ # CONFIG_DEBUG_RODATA is not set
+ 
+ #
+@@ -4594,12 +4624,13 @@ CONFIG_HAVE_ARCH_KGDB=y
+ CONFIG_KEYS=y
+ # CONFIG_PERSISTENT_KEYRINGS is not set
+ # CONFIG_BIG_KEYS is not set
++# CONFIG_TRUSTED_KEYS is not set
+ # CONFIG_ENCRYPTED_KEYS is not set
+ CONFIG_KEYS_DEBUG_PROC_KEYS=y
+ # CONFIG_SECURITY_DMESG_RESTRICT is not set
+ # CONFIG_SECURITY_PERF_EVENTS_RESTRICT is not set
+ CONFIG_SECURITY=y
+-# CONFIG_SECURITYFS is not set
++CONFIG_SECURITYFS=y
+ CONFIG_SECURITY_NETWORK=y
+ # CONFIG_SECURITY_NETWORK_XFRM is not set
+ # CONFIG_SECURITY_PATH is not set
+@@ -4617,9 +4648,22 @@ CONFIG_SECURITY_SELINUX_CHECKREQPROT_VALUE=1
+ # CONFIG_SECURITY_YAMA is not set
+ CONFIG_MST_LDO=y
+ CONFIG_INTEGRITY=y
+-# CONFIG_INTEGRITY_SIGNATURE is not set
++CONFIG_INTEGRITY_SIGNATURE=y
++CONFIG_INTEGRITY_ASYMMETRIC_KEYS=y
+ CONFIG_INTEGRITY_AUDIT=y
+-# CONFIG_IMA is not set
++CONFIG_IMA=y
++CONFIG_IMA_MEASURE_PCR_IDX=10
++CONFIG_IMA_LSM_RULES=y
++# CONFIG_IMA_TEMPLATE is not set
++CONFIG_IMA_NG_TEMPLATE=y
++# CONFIG_IMA_SIG_TEMPLATE is not set
++CONFIG_IMA_DEFAULT_TEMPLATE="ima-ng"
++CONFIG_IMA_DEFAULT_HASH_SHA1=y
++# CONFIG_IMA_DEFAULT_HASH_SHA256 is not set
++# CONFIG_IMA_DEFAULT_HASH_SHA512 is not set
++CONFIG_IMA_DEFAULT_HASH="sha1"
++CONFIG_IMA_APPRAISE=y
++CONFIG_IMA_TRUSTED_KEYRING=y
+ # CONFIG_EVM is not set
+ CONFIG_DEFAULT_SECURITY_SELINUX=y
+ # CONFIG_DEFAULT_SECURITY_DAC is not set
+@@ -4651,6 +4695,7 @@ CONFIG_CRYPTO_WORKQUEUE=y
+ CONFIG_CRYPTO_CRYPTD=y
+ # CONFIG_CRYPTO_MCRYPTD is not set
+ CONFIG_CRYPTO_AUTHENC=y
++# CONFIG_CRYPTO_TEST is not set
+ CONFIG_CRYPTO_ABLK_HELPER=y
+ 
+ #
+@@ -4740,10 +4785,15 @@ CONFIG_CRYPTO_DRBG_CTR=y
+ CONFIG_CRYPTO_DRBG=y
+ # CONFIG_CRYPTO_USER_API_HASH is not set
+ # CONFIG_CRYPTO_USER_API_SKCIPHER is not set
++CONFIG_CRYPTO_HASH_INFO=y
+ CONFIG_CRYPTO_HW=y
+ # CONFIG_CRYPTO_DEV_S5P is not set
+ # CONFIG_CRYPTO_DEV_CCP is not set
+-# CONFIG_ASYMMETRIC_KEY_TYPE is not set
++CONFIG_ASYMMETRIC_KEY_TYPE=y
++CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
++CONFIG_PUBLIC_KEY_ALGO_RSA=y
++CONFIG_X509_CERTIFICATE_PARSER=y
++# CONFIG_PKCS7_MESSAGE_PARSER is not set
+ CONFIG_ARM64_CRYPTO=y
+ CONFIG_CRYPTO_SHA1_ARM64_CE=y
+ CONFIG_CRYPTO_SHA2_ARM64_CE=y
+@@ -4806,7 +4856,11 @@ CONFIG_DQL=y
+ CONFIG_NLATTR=y
+ CONFIG_ARCH_HAS_ATOMIC64_DEC_IF_POSITIVE=y
+ CONFIG_AVERAGE=y
++CONFIG_CLZ_TAB=y
+ # CONFIG_CORDIC is not set
+ # CONFIG_DDR is not set
++CONFIG_MPILIB=y
++CONFIG_SIGNATURE=y
+ CONFIG_LIBFDT=y
++CONFIG_OID_REGISTRY=y
+ CONFIG_ARCH_HAS_SG_CHAIN=y
+--- a/arch/x86/include/uapi/asm/bootparam.h
++++ b/arch/x86/include/uapi/asm/bootparam.h
+@@ -124,7 +124,8 @@ struct boot_params {
+ 	__u32 ext_ramdisk_image;			/* 0x0c0 */
+ 	__u32 ext_ramdisk_size;				/* 0x0c4 */
+ 	__u32 ext_cmd_line_ptr;				/* 0x0c8 */
+-	__u8  _pad4[116];				/* 0x0cc */
++	__u64 acpi_rsdp_addr;				/* 0x0cc */
++	__u8  _pad4[108];				/* 0x0d4 */
+ 	struct edid_info edid_info;			/* 0x140 */
+ 	struct efi_info efi_info;			/* 0x1c0 */
+ 	__u32 alt_mem_k;				/* 0x1e0 */
+
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -44,6 +44,8 @@
+ #include <asm/io.h>
+ #include <asm/mpspec.h>
+ #include <asm/smp.h>
++#include <asm/bootparam.h>
++#include <asm/setup.h>
+ #include <asm/i8259.h>
+ 
+ #include "sleep.h" /* To include x86_acpi_suspend_lowlevel */
+@@ -1432,6 +1434,8 @@ static struct dmi_system_id __initdata acpi_dmi_table_late[] = {
+ 
+ void __init acpi_boot_table_init(void)
+ {
++
++	acpi_rsdp_bootparam = boot_params.acpi_rsdp_addr;
+ 	dmi_check_system(acpi_dmi_table);
+ 
+ 	/*
+--- a/crypto/asymmetric_keys/public_key.c
++++ b/crypto/asymmetric_keys/public_key.c
+@@ -22,6 +22,20 @@
+ 
+ MODULE_LICENSE("GPL");
+ 
++const char *const pkey_hash_algo_name[PKEY_HASH__LAST] = {
++	[PKEY_HASH_MD4]		= "md4",
++	[PKEY_HASH_MD5]		= "md5",
++	[PKEY_HASH_SHA1]	= "sha1",
++	[PKEY_HASH_RIPE_MD_160]	= "rmd160",
++	[PKEY_HASH_SHA256]	= "sha256",
++	[PKEY_HASH_SHA384]	= "sha384",
++	[PKEY_HASH_SHA512]	= "sha512",
++	[PKEY_HASH_SHA224]	= "sha224",
++};
++EXPORT_SYMBOL_GPL(pkey_hash_algo_name);
++
++
++
+ const char *const pkey_algo_name[PKEY_ALGO__LAST] = {
+ 	[PKEY_ALGO_DSA]		= "DSA",
+ 	[PKEY_ALGO_RSA]		= "RSA",
+diff --git a/drivers/Makefile b/drivers/Makefile
+index fdf80188b4a..228be4baef2 100644
+--- a/drivers/Makefile
++++ b/drivers/Makefile
+@@ -110,7 +110,6 @@ obj-$(CONFIG_HWMON)		+= hwmon/
+ obj-$(CONFIG_THERMAL)		+= thermal/
+ obj-$(CONFIG_WATCHDOG)		+= watchdog/
+ obj-$(CONFIG_MD)		+= md/
+-obj-$(CONFIG_BT)		+= bluetooth/
+ obj-$(CONFIG_ACCESSIBILITY)	+= accessibility/
+ obj-$(CONFIG_ISDN)		+= isdn/
+ obj-$(CONFIG_EDAC)		+= edac/
+diff --git a/drivers/acpi/osl.c b/drivers/acpi/osl.c
+index 9964f70be98..89ac657e67a 100644
+--- a/drivers/acpi/osl.c
++++ b/drivers/acpi/osl.c
+@@ -252,9 +252,22 @@ static int __init setup_acpi_rsdp(char *arg)
+ early_param("acpi_rsdp", setup_acpi_rsdp);
+ #endif
+ 
++
++unsigned long long acpi_rsdp_bootparam;
+ acpi_physical_address __init acpi_os_get_root_pointer(void)
+ {
+ #ifdef CONFIG_KEXEC
++	/*
++	 * If bootloader (kexec in this case), has passed, the acpi_rsdp
++	 * in boot params, use that. In case of secureboot /sbin/kexec
++	 * is signed and verified. That means we can trust acpi_rsdp
++	 * as passed in by kexec bootloader
++	 */
++	if (acpi_rsdp_bootparam)
++		return acpi_rsdp_bootparam;
++
++
++
+ 	if (acpi_rsdp)
+ 		return acpi_rsdp;
+ #endif
+--- a/drivers/fingerprint/et320-spi.c
++++ b/drivers/fingerprint/et320-spi.c
+@@ -41,6 +41,8 @@
+ #endif
+ #include <linux/sysfs.h>
+ 
++extern bool fp_lockscreen_mode;
++
+ static DECLARE_BITMAP(minors, N_SPI_MINORS);
+ 
+ static LIST_HEAD(device_list);
+--- a/drivers/fingerprint/fingerprint.h
++++ b/drivers/fingerprint/fingerprint.h
+@@ -54,12 +54,12 @@ extern int FP_CHECK; /* extern variable */
+ #define MC_FC_FP_PM_SUSPEND_RETAIN ((uint32_t)(0x83000026))
+ 
+ /* using for awake the samsung FP daemon */
+-extern bool fp_lockscreen_mode;
++
+ #ifdef CONFIG_SENSORS_FP_LOCKSCREEN_MODE
+ /* input/Keyboard/gpio_keys.c */
+ extern bool wakeup_by_key(void);
+ /* export variable for signaling */
+-EXPORT_SYMBOL(fp_lockscreen_mode);
++
+ #endif
+ #endif
+ 
+--- a/drivers/fingerprint/vfs7xxx.c
++++ b/drivers/fingerprint/vfs7xxx.c
+@@ -79,6 +79,7 @@
+ #endif
+ #include <linux/smc.h>
+ 
++
+ struct sec_spi_info {
+ 	int		port;
+ 	unsigned long	speed;
+@@ -200,6 +201,7 @@ int FP_CHECK = 0; /* extern variable init */
+ 
+ int vfsspi_goto_suspend = 0;
+ bool fp_lockscreen_mode = false;
++EXPORT_SYMBOL(fp_lockscreen_mode);
+ 
+ #define VENDOR		"SYNAPTICS"
+ #define CHIP_ID		"VIPER"
+--- a/drivers/staging/samsung/sec_upload.c
++++ b/drivers/staging/samsung/sec_upload.c
+@@ -229,4 +229,4 @@ void check_crash_keys_in_user(unsigned int code, int state)
+ 		}
+ 	}
+ }
+-EXPORT_SYMBOL(check_crash_keys_in_user)
++EXPORT_SYMBOL(check_crash_keys_in_user);
+diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+index 370b24cee4d..9112ae3ed6c 100644
+--- a/fs/Kconfig.binfmt
++++ b/fs/Kconfig.binfmt
+@@ -23,6 +23,18 @@ config BINFMT_ELF
+ 	  ld.so (check the file <file:Documentation/Changes> for location and
+ 	  latest version).
+ 
++
++config BINFMT_ELF_SIG
++	bool "ELF binary signature verification"
++	depends on BINFMT_ELF
++	depends on INTEGRITY_ASYMMETRIC_KEYS
++	depends on IMA_APPRAISE
++	depends on SYSTEM_TRUSTED_KEYRING
++	default n
++	---help---
++	  Check ELF binary signature verfication.
++
++
+ config COMPAT_BINFMT_ELF
+ 	bool
+ 	depends on COMPAT && BINFMT_ELF
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -34,6 +34,8 @@
+ #include <linux/utsname.h>
+ #include <linux/coredump.h>
+ #include <linux/sched.h>
++#include <linux/ima.h>
++#include <keys/system_keyring.h>
+ #include <asm/uaccess.h>
+ #include <asm/param.h>
+ #include <asm/page.h>
+@@ -569,6 +571,44 @@ static unsigned long randomize_stack_top(unsigned long stack_top)
+ #endif
+ }
+ 
++
++
++#ifdef CONFIG_BINFMT_ELF_SIG
++/* check if current is being ptraced by tracer which is unsigned */
++static bool ptraced_by_unsafe_tracer(void)
++{
++	struct task_struct *child = current, *parent;
++	bool ret = false;
++	const struct cred *tcred;
++
++	/* Make sure parent does not change due to tracer ptrace detach */
++	read_lock(&tasklist_lock);
++
++	if (!child->ptrace) {
++		ret = false;
++		goto out;
++	}
++
++	parent = child->parent;
++	rcu_read_lock();
++	tcred = __task_cred(parent);
++	if (!tcred->proc_signed)
++		ret = true;
++	rcu_read_unlock();
++
++	/*
++	 * Make sure parent is memlocked too otherwise it might be signed
++	 * but still being swapped out and is open to address space
++	 * modifications.
++	 */
++	if (!test_bit(MMF_VM_LOCKED, &parent->mm->flags))
++		ret = true;
++
++out:
++	read_unlock(&tasklist_lock);
++	return ret;
++}
++#endif
+ static int load_elf_binary(struct linux_binprm *bprm)
+ {
+ 	struct file *interpreter = NULL; /* to shut gcc up */
+@@ -586,6 +626,12 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 	unsigned long reloc_func_desc __maybe_unused = 0;
+ 	int executable_stack = EXSTACK_DEFAULT;
+ 	struct pt_regs *regs = current_pt_regs();
++
++	char *signature = NULL;
++#ifdef CONFIG_BINFMT_ELF_SIG
++	unsigned int siglen = 0;
++	bool mlock_mappings = false;
++#endif
+ 	struct {
+ 		struct elfhdr elf_ex;
+ 		struct elfhdr interp_elf_ex;
+@@ -724,6 +770,47 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 	if (retval)
+ 		goto out_free_dentry;
+ 
++
++#ifdef CONFIG_BINFMT_ELF_SIG
++	/*
++	 * If executable is digitally signed and ima memlock info present,
++	 * Lock down in memory
++	 */
++	retval = ima_file_signature_alloc(bprm->file, &signature);
++
++	/*
++	 * If there is an error getting signature, bail out. Having
++	 * no signature is fine though.
++	 */
++	if (retval < 0 && retval != -ENODATA && retval != -EOPNOTSUPP)
++		goto out_free_dentry;
++
++	if (signature != NULL) {
++		siglen = retval;
++		retval = ima_signature_type(signature);
++		if (retval == EVM_IMA_XATTR_DIGSIG &&
++		    ima_memlock_file(signature, siglen)) {
++			/*
++			 * Verify signature before locking down file. We don't
++			 * want to memlock executables with fake signatures
++			 */
++			retval = ima_appraise_file_digsig(
++					system_trusted_keyring,
++					bprm->file, signature, siglen);
++			if (retval) {
++				send_sig(SIGKILL, current, 0);
++				goto out_free_dentry;
++			}
++
++			mlock_mappings = true;
++			current->mm->def_flags |= VM_LOCKED;
++			set_bit(MMF_VM_LOCKED, &current->mm->flags);
++		}
++	}
++#endif
++
++
++
+ 	/* Do this immediately, since STACK_TOP as used in setup_arg_pages
+ 	   may depend on the personality.  */
+ 	SET_PERSONALITY(loc->elf_ex);
+@@ -892,6 +979,32 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 		goto out_free_dentry;
+ 	}
+ 
++
++#ifdef CONFIG_BINFMT_ELF_SIG
++	if (mlock_mappings) {
++		/*
++		 * File locked down in memory. Now it is safe against any
++		 * modifications on disk by raw disk writes. Verify signature.
++		 */
++		retval = ima_appraise_file_digsig(system_trusted_keyring,
++					bprm->file, signature, siglen);
++		if (retval) {
++			send_sig(SIGKILL, current, 0);
++			goto out_free_dentry;
++		}
++
++		/*
++		 * Signature verification successful. If this process is
++		 * is being ptraced at the time of exec() and tracer is
++		 * not signed, do not set proc_signed, otherwise unsigned
++		 * tracer could change signed tracee's address space,
++		 * effectively nullifying singature checking.
++		 */
++if (!ptraced_by_unsafe_tracer() && !elf_interpreter)
++			bprm->cred->proc_signed = true;
++	}
++#endif
++
+ 	if (elf_interpreter) {
+ 		unsigned long interp_map_addr = 0;
+ 
+@@ -984,6 +1097,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+ 	retval = 0;
+ out:
+ 	kfree(loc);
++kfree(signature);
+ out_ret:
+ 	return retval;
+ 
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2616,7 +2616,11 @@ long do_mount(const char *dev_name, const char __user *dir_name,
+ 		((char *)data_page)[PAGE_SIZE - 1] = 0;
+ 
+ 	/* ... and get the mountpoint */
+-	retval = user_path(dir_name, &path);
++	if (flags & MS_NOSYMLINK)
++		retval = kern_path(dir_name, 0, &path);
++	else
++		retval = kern_path(dir_name, LOOKUP_FOLLOW, &path);
++
+ 	if (retval)
+ 		return retval;
+
+--- a/include/crypto/public_key.h
++++ b/include/crypto/public_key.h
+@@ -25,11 +25,32 @@ enum pkey_algo {
+ };
+ 
+ extern const char *const pkey_algo_name[PKEY_ALGO__LAST];
++
++
++enum pkey_hash_algo {
++	PKEY_HASH_MD4,
++	PKEY_HASH_MD5,
++	PKEY_HASH_SHA1,
++	PKEY_HASH_RIPE_MD_160,
++	PKEY_HASH_SHA256,
++	PKEY_HASH_SHA384,
++	PKEY_HASH_SHA512,
++	PKEY_HASH_SHA224,
++	PKEY_HASH__LAST
++};
++
++
+ extern const struct public_key_algorithm *pkey_algo[PKEY_ALGO__LAST];
+ 
+ /* asymmetric key implementation supports only up to SHA224 */
+ #define PKEY_HASH__LAST		(HASH_ALGO_SHA224 + 1)
+ 
++
++
++
++extern const char *const pkey_hash_algo_name[PKEY_HASH__LAST];
++
++
+ enum pkey_id_type {
+ 	PKEY_ID_PGP,		/* OpenPGP generated key ID */
+ 	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
+diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+index 407a12f663e..b6790084bc5 100644
+--- a/include/linux/acpi.h
++++ b/include/linux/acpi.h
+@@ -155,6 +155,8 @@ extern u32 acpi_irq_not_handled;
+ extern int sbf_port;
+ extern unsigned long acpi_realmode_flags;
+ 
++extern unsigned long long acpi_rsdp_bootparam;
++
+ int acpi_register_gsi (struct device *dev, u32 gsi, int triggering, int polarity);
+ int acpi_gsi_to_irq (u32 gsi, unsigned int *irq);
+ int acpi_isa_irq_to_gsi (unsigned isa_irq, u32 *gsi);
+diff --git a/include/linux/cred.h b/include/linux/cred.h
+index 2fb2ca2127e..657f8cb66b5 100644
+--- a/include/linux/cred.h
++++ b/include/linux/cred.h
+@@ -137,6 +137,7 @@ struct cred {
+ 	struct user_namespace *user_ns; /* user_ns the caps and keyrings are relative to. */
+ 	struct group_info *group_info;	/* supplementary groups for euid/fsgid */
+ 	struct rcu_head	rcu;		/* RCU deletion hook */
++	bool	proc_signed;	
+ };
+ 
+ extern void __put_cred(struct cred *);
+diff --git a/include/linux/dbmdx.h b/include/linux/dbmdx.h
+old mode 100755
+new mode 100644
+diff --git a/include/linux/export.h b/include/linux/export.h
+index 96e45ea463e..62dd1ae210e 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -1,5 +1,6 @@
+ #ifndef _LINUX_EXPORT_H
+ #define _LINUX_EXPORT_H
++
+ /*
+  * Export symbols from the kernel to modules.  Forked from module.h
+  * to reduce the amount of pointless cruft we feed to gcc when only
+@@ -23,11 +24,6 @@
+ #define VMLINUX_SYMBOL_STR(x) __VMLINUX_SYMBOL_STR(x)
+ 
+ #ifndef __ASSEMBLY__
+-struct kernel_symbol
+-{
+-	unsigned long value;
+-	const char *name;
+-};
+ 
+ #ifdef MODULE
+ extern struct module __this_module;
+@@ -38,32 +34,77 @@ extern struct module __this_module;
+ 
+ #ifdef CONFIG_MODULES
+ 
+-#ifndef __GENKSYMS__
++#if defined(__KERNEL__) && !defined(__GENKSYMS__)
+ #ifdef CONFIG_MODVERSIONS
+ /* Mark the CRC weak since genksyms apparently decides not to
+  * generate a checksums for some symbols */
+-#define __CRC_SYMBOL(sym, sec)					\
+-	extern __visible void *__crc_##sym __attribute__((weak));		\
+-	static const unsigned long __kcrctab_##sym		\
+-	__used							\
+-	__attribute__((section("___kcrctab" sec "+" #sym), unused))	\
+-	= (unsigned long) &__crc_##sym;
++#if defined(CONFIG_MODULE_REL_CRCS)
++#define __CRC_SYMBOL(sym, sec)						\
++	asm("	.section \"___kcrctab" sec "+" #sym "\", \"a\"	\n"	\
++	    "	.weak	" VMLINUX_SYMBOL_STR(__crc_##sym) "	\n"	\
++	    "	.long	" VMLINUX_SYMBOL_STR(__crc_##sym) " - .	\n"	\
++	    "	.previous					\n");
++#else
++#define __CRC_SYMBOL(sym, sec)						\
++	asm("	.section \"___kcrctab" sec "+" #sym "\", \"a\"	\n"	\
++	    "	.weak	" VMLINUX_SYMBOL_STR(__crc_##sym) "	\n"	\
++	    "	.long	" VMLINUX_SYMBOL_STR(__crc_##sym) "	\n"	\
++	    "	.previous					\n");
++#endif
+ #else
+ #define __CRC_SYMBOL(sym, sec)
+ #endif
+ 
+ /* For every exported symbol, place a struct in the __ksymtab section */
++/*
+++ * For every exported symbol, place a struct in the __ksymtab section.
+++ * Note that we have to visibly take the address of sym, so the compiler
+++ * is forced to emit it, rather than inlining it or removing it
+++ * altogether. Do so in a way that avoids taking the address statically,
+++ * and emit that code into a section that is discarded by the linker.
+++ */
++#define ___EXPORT_SYMBOL(sym, sec)					\
++	extern typeof(sym) sym;						\
++	__CRC_SYMBOL(sym, sec)						\
++	static const char __kstrtab_##sym[]				\
++	__attribute__((section("__ksymtab_strings"), used, aligned(1)))	\
++	= VMLINUX_SYMBOL_STR(sym);					\
++	static void * __attribute__((section(".discard"), used))	\
++			__discard_##sym(void) { return (void *)&sym; }	\
++	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
++	    "	.balign	8					\n"	\
++	    VMLINUX_SYMBOL_STR(__ksymtab_##sym) ":		\n"	\
++	    "	.long "	VMLINUX_SYMBOL_STR(sym) "- .		\n"	\
++	    "	.long "	VMLINUX_SYMBOL_STR(__kstrtab_##sym) "- .\n"	\
++	    "	.previous					\n")
++
++#if defined(__KSYM_DEPS__)
++
++/*
++ * For fine grained build dependencies, we want to tell the build system
++ * about each possible exported symbol even if they're not actually exported.
++ * We use a string pattern that is unlikely to be valid code that the build
++ * system filters out from the preprocessor output (see ksym_dep_filter
++ * in scripts/Kbuild.include).
++ */
++#define __EXPORT_SYMBOL(sym, sec)	=== __KSYM_##sym ===
++
++#elif defined(CONFIG_TRIM_UNUSED_KSYMS)
++
++#include <generated/autoksyms.h>
++
+ #define __EXPORT_SYMBOL(sym, sec)				\
+-	extern typeof(sym) sym;					\
+-	__CRC_SYMBOL(sym, sec)					\
+-	static const char __kstrtab_##sym[]			\
+-	__attribute__((section("__ksymtab_strings"), aligned(1))) \
+-	= VMLINUX_SYMBOL_STR(sym);				\
+-	extern const struct kernel_symbol __ksymtab_##sym;	\
+-	__visible const struct kernel_symbol __ksymtab_##sym	\
+-	__used							\
+-	__attribute__((section("___ksymtab" sec "+" #sym), unused))	\
+-	= { (unsigned long)&sym, __kstrtab_##sym }
++	__cond_export_sym(sym, sec, __is_defined(__KSYM_##sym))
++#define __cond_export_sym(sym, sec, conf)			\
++	___cond_export_sym(sym, sec, conf)
++#define ___cond_export_sym(sym, sec, enabled)			\
++	__cond_export_sym_##enabled(sym, sec)
++#define __cond_export_sym_1(sym, sec) ___EXPORT_SYMBOL(sym, sec)
++#define __cond_export_sym_0(sym, sec) /* nothing */
++
++#else
++#define __EXPORT_SYMBOL ___EXPORT_SYMBOL
++#endif
+ 
+ #define EXPORT_SYMBOL(sym)					\
+ 	__EXPORT_SYMBOL(sym, "")
+diff --git a/include/linux/host_notify.h b/include/linux/host_notify.h
+old mode 100755
+new mode 100644
+diff --git a/include/linux/ima.h b/include/linux/ima.h
+index 120ccc53fcb..5e0f8611f17 100644
+--- a/include/linux/ima.h
++++ b/include/linux/ima.h
+@@ -11,6 +11,9 @@
+ #define _LINUX_IMA_H
+ 
+ #include <linux/fs.h>
++#include <linux/integrity.h>
++#include <linux/key.h>
++
+ struct linux_binprm;
+ 
+ #ifdef CONFIG_IMA
+@@ -19,6 +22,9 @@ extern int ima_file_check(struct file *file, int mask, int opened);
+ extern void ima_file_free(struct file *file);
+ extern int ima_file_mmap(struct file *file, unsigned long prot);
+ extern int ima_module_check(struct file *file);
++extern bool ima_memlock_file(char *sig, unsigned int siglen);
++extern int ima_file_signature_alloc(struct file *file, char **sig);
++extern int ima_signature_type(char *sig);
+ extern int ima_fw_from_file(struct file *file, char *buf, size_t size);
+ 
+ #else
+@@ -52,6 +58,22 @@ static inline int ima_fw_from_file(struct file *file, char *buf, size_t size)
+ 	return 0;
+ }
+ 
++static inline bool ima_memlock_file(char *sig, unsigned int siglen)
++{
++	return false;
++}
++
++ 
++static inline int ima_file_signature_alloc(struct file *file, char **sig)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline int ima_signature_type(char *sig)
++{
++	return -EOPNOTSUPP;
++}
++
+ #endif /* CONFIG_IMA */
+ 
+ #ifdef CONFIG_IMA_APPRAISE
+@@ -59,6 +81,7 @@ extern void ima_inode_post_setattr(struct dentry *dentry);
+ extern int ima_inode_setxattr(struct dentry *dentry, const char *xattr_name,
+ 		       const void *xattr_value, size_t xattr_value_len);
+ extern int ima_inode_removexattr(struct dentry *dentry, const char *xattr_name);
++extern int ima_appraise_file_digsig(struct key *keyring, struct file *file, char *sig, unsigned int siglen);
+ #else
+ static inline void ima_inode_post_setattr(struct dentry *dentry)
+ {
+@@ -78,5 +101,9 @@ static inline int ima_inode_removexattr(struct dentry *dentry,
+ {
+ 	return 0;
+ }
++static inline int ima_appraise_file_digsig(struct key *keyring, struct file *file, char *sig, unsigned int siglen)
++{
++	return -EOPNOTSUPP;
++}
+ #endif /* CONFIG_IMA_APPRAISE */
+ #endif /* _LINUX_IMA_H */
+diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+index 83222cebd47..80ed1d65ab0 100644
+--- a/include/linux/integrity.h
++++ b/include/linux/integrity.h
+@@ -11,6 +11,7 @@
+ #define _LINUX_INTEGRITY_H
+ 
+ #include <linux/fs.h>
++#include <linux/key.h>
+ 
+ enum integrity_status {
+ 	INTEGRITY_PASS = 0,
+@@ -20,6 +21,15 @@ enum integrity_status {
+ 	INTEGRITY_UNKNOWN,
+ };
+ 
++
++enum evm_ima_xattr_type {
++	IMA_XATTR_DIGEST = 0x01,
++	EVM_XATTR_HMAC,
++	EVM_IMA_XATTR_DIGSIG,
++	IMA_XATTR_DIGEST_NG,
++	EVM_XATTR_PORTABLE_DIGSIG,
++	IMA_XATTR_LAST
++};
+ /* List of EVM protected security xattrs */
+ #ifdef CONFIG_INTEGRITY
+ extern struct integrity_iint_cache *integrity_inode_get(struct inode *inode);
+@@ -37,4 +47,22 @@ static inline void integrity_inode_free(struct inode *inode)
+ 	return;
+ }
+ #endif /* CONFIG_INTEGRITY */
++
++
++#ifdef CONFIG_INTEGRITY_SIGNATURE
++extern int integrity_verify_user_buffer_digsig(struct key *keyring,
++				const char __user *data,
++				unsigned long data_len,
++				char *sig, unsigned int siglen);
++#else
++static inline int integrity_verify_user_buffer_digsig(struct key *keyring,
++				const char __user *data,
++				unsigned long data_len,
++				char *sig, unsigned int siglen)
++{
++	return -EOPNOTSUPP;
++}
++#endif /* CONFIG_INTEGRITY_SIGNATURE */
++
++
+ #endif /* _LINUX_INTEGRITY_H */
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -466,6 +466,7 @@ static inline int get_dumpable(struct mm_struct *mm)
+ 
+ #define MMF_HAS_UPROBES		19	/* has uprobes */
+ #define MMF_RECALC_UPROBES	20	/* MMF_HAS_UPROBES can be wrong */
++#define MMF_VM_LOCKED		21
+ 
+ #define MMF_INIT_MASK		(MMF_DUMPABLE_MASK | MMF_DUMP_FILTER_MASK)
+
+--- a/include/uapi/linux/fs.h
++++ b/include/uapi/linux/fs.h
+@@ -93,7 +93,7 @@ struct ci_lookup_data {
+ #define MS_KERNMOUNT	(1<<22) /* this is a kern_mount call */
+ #define MS_I_VERSION	(1<<23) /* Update inode I_version field */
+ #define MS_STRICTATIME	(1<<24) /* Always perform atime updates */
+-
++#define MS_NOSYMLINK	(1<<25) /* Do not follow symlink at the end */
+ /* These sb flags are internal to the kernel */
+ #define MS_NOSEC	(1<<28)
+ #define MS_BORN		(1<<29)
+diff --git a/include/uapi/linux/keyctl.h b/include/uapi/linux/keyctl.h
+index 840cb990abe..813068e168a 100644
+--- a/include/uapi/linux/keyctl.h
++++ b/include/uapi/linux/keyctl.h
+@@ -12,6 +12,17 @@
+ #ifndef _LINUX_KEYCTL_H
+ #define _LINUX_KEYCTL_H
+ 
++/* Data required to verify signature of a user buffer */
++struct keyctl_sig_data {
++	void *data;
++	size_t datalen;
++	void *sig;
++	size_t siglen;
++	unsigned long sig_type;
++	unsigned long keyring_id;
++	unsigned long flags;
++};
++
+ /* special process keyring shortcut IDs */
+ #define KEY_SPEC_THREAD_KEYRING		-1	/* - key ID for thread-specific keyring */
+ #define KEY_SPEC_PROCESS_KEYRING	-2	/* - key ID for process-specific keyring */
+@@ -57,5 +68,10 @@
+ #define KEYCTL_INSTANTIATE_IOV		20	/* instantiate a partially constructed key */
+ #define KEYCTL_INVALIDATE		21	/* invalidate a key */
+ #define KEYCTL_GET_PERSISTENT		22	/* get a user's persistent keyring */
++#define KEYCTL_VERIFY_SIGNATURE		23	/* use a key to verify a signature */
+ 
++/* Type of signatures */
++#define KEYCTL_SIG_TYPE_UNKNOWN			0
++#define KEYCTL_SIG_TYPE_INTEGRITY_DIGSIG	1 	/* Digital Signature generated by integrity subsystem utilities */
++ 
+ #endif /*  _LINUX_KEYCTL_H */
+diff --git a/include/uapi/linux/netfilter_ipv4/ipt_ULOG.h b/include/uapi/linux/netfilter_ipv4/ipt_ULOG.h
+old mode 100755
+new mode 100644
+diff --git a/kernel/cred.c b/kernel/cred.c
+index e0573a43c7d..589f1fa78fa 100644
+--- a/kernel/cred.c
++++ b/kernel/cred.c
+@@ -299,6 +299,8 @@ struct cred *prepare_exec_creds(void)
+ 	new->process_keyring = NULL;
+ #endif
+ 
++	/* proc_signed status will be evaluated again from executable file */
++	new->proc_signed = false;
+ 	return new;
+ }
+ 
+diff --git a/kernel/kexec.c b/kernel/kexec.c
+index 2abf9f6e9a6..4dc9bafa2d6 100644
+--- a/kernel/kexec.c
++++ b/kernel/kexec.c
+@@ -1214,6 +1214,31 @@ static int kimage_load_segment(struct kimage *image,
+ 	return result;
+ }
+ 
++
++static int check_task_signature(void)
++{
++	int ret = 0;
++	const struct cred *cred;
++
++	/* If secureboot is enabled, There are extra checks required */
++	/* TODO: Change it once secure_level patches stablize */
++/*
++	if (!secure_modules())
++		return ret;
++*/
++	/*
++	 * Calling process should be signed, memlocked.
++	 */
++
++	if (!test_bit(MMF_VM_LOCKED, &current->mm->flags))
++		return -EPERM;
++
++	cred = current_cred();
++	if (!cred->proc_signed)
++		return -EPERM;
++
++	return ret;
++}
+ /*
+  * Exec Kernel system call: for obvious reasons only root may call it.
+  *
+@@ -1250,6 +1275,10 @@ SYSCALL_DEFINE4(kexec_load, unsigned long, entry, unsigned long, nr_segments,
+ 	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
+ 		return -EPERM;
+ 
++
++	result = check_task_signature();
++	if (result)
++		return result;
+ 	/*
+ 	 * Verify we have a legal set of flags
+ 	 * This leaves us room for future extensions.
+diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
+index 6683ccef9ff..d9e26268846 100644
+--- a/kernel/ksysfs.c
++++ b/kernel/ksysfs.c
+@@ -18,8 +18,9 @@
+ #include <linux/stat.h>
+ #include <linux/sched.h>
+ #include <linux/capability.h>
++#include <linux/efi.h>
++#include <linux/module.h>
+ #include <linux/compiler.h>
+-
+ #include <linux/rcupdate.h>	/* rcu_expedited */
+ 
+ #define KERNEL_ATTR_RO(_name) \
+@@ -105,6 +106,26 @@ static ssize_t kexec_crash_loaded_show(struct kobject *kobj,
+ }
+ KERNEL_ATTR_RO(kexec_crash_loaded);
+ 
++static ssize_t secureboot_enabled_show(struct kobject *kobj,
++				       struct kobj_attribute *attr, char *buf)
++{
++	/* TODO: Change it once secureboot patches are in */
++	return sprintf(buf, "%d\n", 1);
++}
++KERNEL_ATTR_RO(secureboot_enabled);
++
++static ssize_t secure_modules_enabled_show(struct kobject *kobj,
++				       struct kobj_attribute *attr, char *buf)
++{
++	/*
++	 * TODO: Change it once secure_modules() or secure_level() patches
++	 * are in
++	 */
++	return sprintf(buf, "%d\n", 1);
++}
++KERNEL_ATTR_RO(secure_modules_enabled);
++
++
+ static ssize_t kexec_crash_size_show(struct kobject *kobj,
+ 				       struct kobj_attribute *attr, char *buf)
+ {
+@@ -201,6 +222,9 @@ static struct attribute * kernel_attrs[] = {
+ 	&kexec_crash_loaded_attr.attr,
+ 	&kexec_crash_size_attr.attr,
+ 	&vmcoreinfo_attr.attr,
++#endif
++#ifdef CONFIG_EFI
++	&secureboot_enabled_attr.attr,
+ #endif
+ 	&rcu_expedited_attr.attr,
+ 	NULL
+diff --git a/kernel/module.c b/kernel/module.c
+index 88cec1ddb1e..99e894719b7 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -93,6 +93,12 @@
+ /* If this is set, the section belongs in the init part of the module */
+ #define INIT_OFFSET_MASK (1UL << (BITS_PER_LONG-1))
+ 
++
++struct kernel_symbol
++{
++	signed int value_offset;
++	signed int name_offset;
++};
+ /*
+  * Mutex protects:
+  * 1) List of modules (also safely readable with preempt_disable),
+@@ -401,12 +407,25 @@ static bool check_symbol(const struct symsearch *syms,
+ 	return true;
+ }
+ 
++
++ 
++static unsigned long kernel_symbol_value(const struct kernel_symbol *sym)
++{
++	return (unsigned long)&sym->value_offset + sym->value_offset;
++}
++
++static const char *kernel_symbol_name(const struct kernel_symbol *sym)
++{
++	return (const char *)((unsigned long)&sym->name_offset +
++			      sym->name_offset);
++}
++
+ static int cmp_name(const void *va, const void *vb)
+ {
+ 	const char *a;
+ 	const struct kernel_symbol *b;
+ 	a = va; b = vb;
+-	return strcmp(a, b->name);
++	return strcmp(a, kernel_symbol_name(b));
+ }
+ 
+ static bool find_symbol_in_section(const struct symsearch *syms,
+@@ -1892,7 +1911,7 @@ void *__symbol_get(const char *symbol)
+ 		sym = NULL;
+ 	preempt_enable();
+ 
+-	return sym ? (void *)sym->value : NULL;
++return sym ? (void *)kernel_symbol_value(sym) : NULL;
+ }
+ EXPORT_SYMBOL_GPL(__symbol_get);
+ 
+@@ -1922,10 +1941,12 @@ static int verify_export_symbols(struct module *mod)
+ 
+ 	for (i = 0; i < ARRAY_SIZE(arr); i++) {
+ 		for (s = arr[i].sym; s < arr[i].sym + arr[i].num; s++) {
+-			if (find_symbol(s->name, &owner, NULL, true, false)) {
++			if (find_symbol(kernel_symbol_name(s), &owner, NULL,
++					true, false)) {
+ 				pr_err("%s: exports duplicate symbol %s"
+ 				       " (owned by %s)\n",
+-				       mod->name, s->name, module_name(owner));
++				       mod->name, kernel_symbol_name(s),
++				       module_name(owner));
+ 				return -ENOEXEC;
+ 			}
+ 		}
+@@ -1970,7 +1991,7 @@ static int simplify_symbols(struct module *mod, const struct load_info *info)
+ 			ksym = resolve_symbol_wait(mod, info, name);
+ 			/* Ok if resolved.  */
+ 			if (ksym && !IS_ERR(ksym)) {
+-				sym[i].st_value = ksym->value;
++				sym[i].st_value = kernel_symbol_value(ksym);
+ 				break;
+ 			}
+ 
+@@ -2214,7 +2235,7 @@ static int is_exported(const char *name, unsigned long value,
+ 		ks = lookup_symbol(name, __start___ksymtab, __stop___ksymtab);
+ 	else
+ 		ks = lookup_symbol(name, mod->syms, mod->syms + mod->num_syms);
+-	return ks != NULL && ks->value == value;
++return ks != NULL && kernel_symbol_value(ks) == value;
+ }
+ 
+ /* As per nm */
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -760,6 +760,9 @@ SYSCALL_DEFINE2(munlock, unsigned long, start, size_t, len)
+ {
+ 	int ret;
+ 
++	if (test_bit(MMF_VM_LOCKED, &current->mm->flags))
++		return -EINVAL;
++
+ 	len = PAGE_ALIGN(len + (start & ~PAGE_MASK));
+ 	start &= PAGE_MASK;
+ 
+@@ -831,6 +834,9 @@ SYSCALL_DEFINE0(munlockall)
+ {
+ 	int ret;
+ 
++	if (test_bit(MMF_VM_LOCKED, &current->mm->flags))
++		return -EINVAL;
++
+ 	down_write(&current->mm->mmap_sem);
+ 	ret = do_mlockall(0);
+ 	up_write(&current->mm->mmap_sem);
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2674,9 +2674,6 @@ static unsigned long do_brk(unsigned long addr, unsigned long len)
+ 	pgoff_t pgoff = addr >> PAGE_SHIFT;
+ 	int error;
+ 
+-	len = PAGE_ALIGN(len);
+-	if (!len)
+-		return addr;
+ 
+ 	flags = VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
+ 
+@@ -2752,6 +2749,10 @@ unsigned long vm_brk(unsigned long addr, unsigned long len)
+ 	unsigned long ret;
+ 	bool populate;
+ 
++	len = PAGE_ALIGN(len);
++	if (!len)
++		return addr;
++
+ 	down_write(&mm->mmap_sem);
+ 	ret = do_brk(addr, len);
+ 	populate = ((mm->def_flags & VM_LOCKED) != 0);
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -157,6 +157,15 @@ int cap_ptrace_access_check(struct task_struct *child, unsigned int mode)
+ 	rcu_read_lock();
+ 	cred = current_cred();
+ 	child_cred = __task_cred(child);
++
++
++
++	if (mode != PTRACE_MODE_READ && child_cred->proc_signed &&
++	    !cred->proc_signed) {
++		ret = -EPERM;
++		goto out;
++	}
++
+ 	if (cred->user_ns == child_cred->user_ns &&
+ 	    cap_issubset(child_cred->cap_permitted, cred->cap_permitted))
+ 		goto out;
+@@ -189,6 +198,15 @@ int cap_ptrace_traceme(struct task_struct *parent)
+ 	rcu_read_lock();
+ 	cred = __task_cred(parent);
+ 	child_cred = current_cred();
++
++
++
++	if (child_cred->proc_signed && !cred->proc_signed) {
++		ret = -EPERM;
++		goto out;
++	}
++
++
+ 	if (cred->user_ns == child_cred->user_ns &&
+ 	    cap_issubset(child_cred->cap_permitted, cred->cap_permitted))
+ 		goto out;
+diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+index 8d4fbff8b87..03fdc752029 100644
+--- a/security/integrity/digsig.c
++++ b/security/integrity/digsig.c
+@@ -16,8 +16,11 @@
+ #include <linux/sched.h>
+ #include <linux/rbtree.h>
+ #include <linux/cred.h>
++#include <linux/sched.h>
+ #include <linux/key-type.h>
+ #include <linux/digsig.h>
++#include <crypto/hash.h>
++#include <crypto/public_key.h>
+ 
+ #include "integrity.h"
+ 
+@@ -33,6 +36,64 @@ static const char *keyring_name[INTEGRITY_KEYRING_MAX] = {
+ #endif
+ };
+ 
++
++ 
++int integrity_digsig_get_hash_algo(char *sig)
++{
++	uint8_t hash_algo;
++
++	if (sig[0] == 1) {
++		hash_algo = ((struct signature_hdr *)sig)->hash;
++		switch (hash_algo) {
++		case 0:
++			return PKEY_HASH_SHA1;
++		case 1:
++			return PKEY_HASH_SHA256;
++		default:
++		return -ENOPKG;
++		}
++	} else if (sig[0] == 2 ) {
++		hash_algo = ((struct signature_v2_hdr *)sig)->hash_algo;
++		if (hash_algo >= PKEY_HASH__LAST)
++			return -ENOPKG;
++		return hash_algo;
++	}
++
++	return -EBADMSG;
++}
++
++
++/* Get size of digital signature */
++int integrity_get_digsig_size(char *sig)
++{
++	uint16_t sz;
++
++	if (sig[0] == 1) {
++		sz = *((uint16_t *)(sig + sizeof(struct signature_hdr)));
++		sz = __be16_to_cpu(sz);
++		return sizeof(struct signature_hdr) + 2 + (sz >> 3);
++	} else if (sig[0] == 2 ) {
++		sz = ((struct signature_v2_hdr *)sig)->sig_size;
++		return sizeof(struct signature_v2_hdr) + __be16_to_cpu(sz);
++	}
++
++	return -EBADMSG;
++}
++
++int integrity_digsig_verify_keyring(struct key *keyring, const char *sig,
++		int siglen, const char *digest, int digestlen)
++{
++	switch (sig[0]) {
++	case 1:
++		return digsig_verify(keyring, sig, siglen,
++				     digest, digestlen);
++	case 2:
++		return asymmetric_verify(keyring, sig, siglen,
++					 digest, digestlen);
++	}
++	return -EOPNOTSUPP;
++}
++
+ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
+ 			    const char *digest, int digestlen)
+ {
+@@ -50,19 +111,124 @@ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
+ 		}
+ 	}
+ 
+-	switch (sig[1]) {
+-	case 1:
+-		/* v1 API expect signature without xattr type */
+-		return digsig_verify(keyring[id], sig + 1, siglen - 1,
+-				     digest, digestlen);
+-	case 2:
+-		return asymmetric_verify(keyring[id], sig, siglen,
+-					 digest, digestlen);
++	return integrity_digsig_verify_keyring(keyring[id], sig, siglen, digest, digestlen);
++}
++
++static int integrity_calc_user_buffer_hash(enum pkey_hash_algo hash_algo,
++					const char __user *data,
++					unsigned long data_len, char **_digest,
++					unsigned int *digest_len)
++{
++	char *buffer, *digest;
++	unsigned long len;
++	struct crypto_shash *tfm;
++	size_t desc_size, digest_size;
++	struct shash_desc *desc;
++	int ret;
++
++	buffer = kmalloc(PAGE_SIZE, GFP_KERNEL);
++	if (!buffer)
++		return -ENOMEM;
++
++	/* TODO: allow different kind of hash */
++	tfm = crypto_alloc_shash(pkey_hash_algo_name[hash_algo], 0, 0);
++	if (IS_ERR(tfm)) {
++		ret = PTR_ERR(tfm);
++		goto out;
++	}
++	desc_size = crypto_shash_descsize(tfm) + sizeof(*desc);
++	desc = kzalloc(desc_size, GFP_KERNEL);
++	if (!desc) {
++		ret = -ENOMEM;
++		goto out_free_tfm;
+ 	}
+ 
+-	return -EOPNOTSUPP;
++	desc->tfm   = tfm;
++	desc->flags = 0;
++
++	ret = crypto_shash_init(desc);
++	if (ret < 0)
++		goto out_free_desc;
++
++	digest_size = crypto_shash_digestsize(tfm);
++	digest = kzalloc(digest_size, GFP_KERNEL);
++	if (!digest) {
++		ret = -ENOMEM;
++		goto out_free_desc;
++	}
++
++	do {
++		len = min(data_len, PAGE_SIZE - ((size_t)data & ~PAGE_MASK));
++		ret = -EFAULT;
++		if (copy_from_user(buffer, data, len) != 0)
++			goto out_free_digest;
++
++		ret = crypto_shash_update(desc, buffer, len);
++                if (ret)
++                        break;
++
++		data_len -= len;
++		data += len;
++
++		if (fatal_signal_pending(current)) {
++			ret = -EINTR;
++			break;
++		}
++	} while (data_len > 0);
++
++	if (!ret) {
++		ret = crypto_shash_final(desc, digest);
++		*_digest = digest;
++		*digest_len = digest_size;
++		digest = NULL;
++	}
++
++out_free_digest:
++	if (digest)
++		kfree(digest);
++out_free_desc:
++	kfree(desc);
++out_free_tfm:
++	kfree(tfm);
++out:
++	kfree(buffer);
++	return ret;
++}
++
++/*
++ * Appraise a user buffer with a given digital signature
++ * keyring: keyring to use for appraisal
++ * sig: signature
++ * siglen: length of signature
++ *
++ * Returns 0 on successful appraisal, error otherwise.
++ */
++int integrity_verify_user_buffer_digsig(struct key *keyring,
++				const char __user *data,
++				unsigned long data_len,
++				char *sig, unsigned int siglen)
++{
++	int ret = 0;
++	enum pkey_hash_algo hash_algo;
++	char *digest = NULL;
++	unsigned int digest_len = 0;
++
++	hash_algo = integrity_digsig_get_hash_algo(sig);
++	if (hash_algo < 0)
++		return hash_algo;
++
++	ret = integrity_calc_user_buffer_hash(hash_algo, data, data_len,
++						&digest, &digest_len);
++	if (ret)
++		return ret;
++
++	ret = integrity_digsig_verify_keyring(keyring, sig, siglen, digest,
++					digest_len);
++	kfree(digest);
++	return ret;
+ }
+ 
++
+ int integrity_init_keyring(const unsigned int id)
+ {
+ 	const struct cred *cred = current_cred();
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index 86885979918..28c704d8a00 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -336,3 +336,56 @@ const char *ima_d_path(struct path *path, char **pathbuf)
+ 	}
+ 	return pathname ?: (const char *)path->dentry->d_name.name;
+ }
++
++
++/* Given the signature check whether file should be memlocked or not */
++bool ima_memlock_file(char *sig, unsigned int siglen)
++{
++	struct evm_ima_xattr_data *ima_xattr = (struct evm_ima_xattr_data *)sig;
++	char *sptr;
++	unsigned int dsiglen;
++	uint8_t version;
++
++	dsiglen = integrity_get_digsig_size((char *)ima_xattr->digest);
++
++	if (siglen <= dsiglen)
++		return false;
++
++	/*
++	 * Make sure atleast 9 more bytes are there to scan for magic string
++	 * and version info
++	 */
++	if (siglen <= dsiglen + 9)
++		return false;
++
++	sptr = (char *)ima_xattr->digest + dsiglen;
++
++	if (strncmp(sptr, "MEMLOCK", 7))
++		return false;
++
++	sptr += 8;
++	version = sptr[0];
++	if (version != 1)
++		return false;
++	sptr++;
++	if (sptr[0] != 1)
++		return false;
++
++	return true;
++}
++
++
++/*
++ * Get ima signature.
++ */
++int ima_file_signature_alloc(struct file *file, char **sig)
++{
++	struct dentry *dentry = file->f_dentry;
++
++	return vfs_getxattr_alloc(dentry, XATTR_NAME_IMA, sig, 0, GFP_NOFS);
++}
++
++int ima_signature_type(char *sig)
++{
++	return ((struct evm_ima_xattr_data *)sig)->type;
++}
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index 7c8f41e618b..9e8841aecb7 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -15,6 +15,8 @@
+ #include <linux/magic.h>
+ #include <linux/ima.h>
+ #include <linux/evm.h>
++#include <crypto/public_key.h>
++#include <crypto/hash.h>
+ #include <crypto/hash_info.h>
+ 
+ #include "ima.h"
+@@ -130,6 +132,129 @@ static void ima_cache_flags(struct integrity_iint_cache *iint, int func)
+ 	}
+ }
+ 
++static int ima_get_file_hash(struct file *file, char **_digest,
++				unsigned int *digest_len,
++				enum pkey_hash_algo hash_algo)
++{
++	loff_t i_size, offset = 0;
++	char *rbuf;
++	int ret, read = 0;
++	struct crypto_shash *tfm;
++	size_t desc_size, digest_size;
++	struct shash_desc *desc;
++	char *digest = NULL;
++
++	rbuf = kzalloc(PAGE_SIZE, GFP_KERNEL);
++	if (!rbuf)
++		return -ENOMEM;
++
++	tfm = crypto_alloc_shash(pkey_hash_algo_name[hash_algo], 0, 0);
++	if (IS_ERR(tfm)) {
++		ret = PTR_ERR(tfm);
++		goto out;
++	}
++
++	desc_size = crypto_shash_descsize(tfm) + sizeof(*desc);
++	desc = kzalloc(desc_size, GFP_KERNEL);
++	if (!desc) {
++		ret = -ENOMEM;
++		goto out_free_tfm;
++	}
++
++	desc->tfm   = tfm;
++	desc->flags = 0;
++
++	ret = crypto_shash_init(desc);
++	if (ret < 0)
++		goto out_free_desc;
++
++	digest_size = crypto_shash_digestsize(tfm);
++	digest = kzalloc(digest_size, GFP_KERNEL);
++	if (!digest) {
++		ret = -ENOMEM;
++		goto out_free_desc;
++	}
++
++	if (!(file->f_mode & FMODE_READ)) {
++		file->f_mode |= FMODE_READ;
++		read = 1;
++	}
++	i_size = i_size_read(file_inode(file));
++	while (offset < i_size) {
++		int rbuf_len;
++
++		rbuf_len = kernel_read(file, offset, rbuf, PAGE_SIZE);
++		if (rbuf_len < 0) {
++			ret = rbuf_len;
++			break;
++		}
++		if (rbuf_len == 0)
++			break;
++		offset += rbuf_len;
++
++		ret = crypto_shash_update(desc, rbuf, rbuf_len);
++		if (ret)
++			break;
++	}
++
++	if (!ret) {
++		ret = crypto_shash_final(desc, digest);
++		*_digest = digest;
++		*digest_len = digest_size;
++		digest = NULL;
++	}
++
++	if (read)
++		file->f_mode &= ~FMODE_READ;
++
++out_free_desc:
++	kfree(desc);
++out_free_tfm:
++	kfree(tfm);
++out:
++	if (digest)
++		kfree(digest);
++	kfree(rbuf);
++	return ret;
++}
++
++/*
++ * Appraise a file with a given digital signature
++ * keyring: keyring to use for appraisal
++ * sig: signature
++ * siglen: length of signature
++ *
++ * Returns 0 on successful appraisal, error otherwise.
++ */
++int ima_appraise_file_digsig(struct key *keyring, struct file *file, char *sig,
++				unsigned int siglen)
++{
++	struct evm_ima_xattr_data *xattr_value;
++	int ret = 0;
++	char *digest = NULL;
++	enum pkey_hash_algo hash_algo;
++	unsigned int digest_len = 0;
++
++	xattr_value = (struct evm_ima_xattr_data*) sig;
++
++	if (xattr_value->type != EVM_IMA_XATTR_DIGSIG)
++		return -EBADMSG;
++	ret = integrity_digsig_get_hash_algo(xattr_value->digest);
++	if (ret < 0)
++		return ret;
++
++	hash_algo = (enum pkey_hash_algo)ret;
++	ret = ima_get_file_hash(file, &digest, &digest_len, hash_algo);
++	if (ret)
++		return ret;
++
++	ret = integrity_digsig_verify_keyring(keyring, xattr_value->digest,
++				integrity_get_digsig_size(xattr_value->digest),
++				digest, digest_len);
++	kfree(digest);
++	return ret;
++}
++
+ void ima_get_hash_algo(struct evm_ima_xattr_data *xattr_value, int xattr_len,
+ 		       struct ima_digest_data *hash)
+ {
+@@ -249,9 +374,9 @@ int ima_appraise_measurement(int func, struct integrity_iint_cache *iint,
+ 	case EVM_IMA_XATTR_DIGSIG:
+ 		iint->flags |= IMA_DIGSIG;
+ 		rc = integrity_digsig_verify(INTEGRITY_KEYRING_IMA,
+-					     (const char *)xattr_value, rc,
+-					     iint->ima_hash->digest,
+-					     iint->ima_hash->length);
++				xattr_value->digest,
++				integrity_get_digsig_size(xattr_value->digest),
++				iint->ima_xattr.digest, IMA_DIGEST_SIZE);
+ 		if (rc == -EOPNOTSUPP) {
+ 			status = INTEGRITY_UNKNOWN;
+ 		} else if (rc) {
+diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+index 9d1c2ebfe12..5efdddc1841 100644
+--- a/security/integrity/integrity.h
++++ b/security/integrity/integrity.h
+@@ -15,7 +15,7 @@
+ #include <linux/integrity.h>
+ #include <crypto/sha.h>
+ #include <linux/key.h>
+-
++#include <crypto/public_key.h>
+ /* iint action cache flags */
+ #define IMA_MEASURE		0x00000001
+ #define IMA_MEASURED		0x00000002
+@@ -56,13 +56,6 @@
+ 				 IMA_BPRM_APPRAISED | IMA_MODULE_APPRAISED | \
+ 				 IMA_FIRMWARE_APPRAISED)
+ 
+-enum evm_ima_xattr_type {
+-	IMA_XATTR_DIGEST = 0x01,
+-	EVM_XATTR_HMAC,
+-	EVM_IMA_XATTR_DIGSIG,
+-	IMA_XATTR_DIGEST_NG,
+-	IMA_XATTR_LAST
+-};
+ 
+ struct evm_ima_xattr_data {
+ 	u8 type;
+@@ -88,24 +81,26 @@ struct ima_digest_data {
+ 	u8 digest[0];
+ } __packed;
+ 
+-/*
+- * signature format v2 - for using with asymmetric keys
+- */
+ struct signature_v2_hdr {
+-	uint8_t type;		/* xattr type */
+ 	uint8_t version;	/* signature format version */
+ 	uint8_t	hash_algo;	/* Digest algorithm [enum pkey_hash_algo] */
+-	uint32_t keyid;		/* IMA key identifier - not X509/PGP specific */
++	uint32_t keyid;		/* IMA key identifier - not X509/PGP specific*/
+ 	uint16_t sig_size;	/* signature size */
+ 	uint8_t sig[0];		/* signature payload */
+ } __packed;
+ 
++/*
++ * signature format v2 - for using with asymmetric keys
++ */
++
++
+ /* integrity data associated with an inode */
+ struct integrity_iint_cache {
+ 	struct rb_node rb_node;	/* rooted in integrity_iint_tree */
+ 	struct inode *inode;	/* back pointer to inode in question */
+ 	u64 version;		/* track inode changes */
+ 	unsigned long flags;
++	struct evm_ima_xattr_data ima_xattr;
+ 	enum integrity_status ima_file_status:4;
+ 	enum integrity_status ima_mmap_status:4;
+ 	enum integrity_status ima_bprm_status:4;
+@@ -130,9 +125,20 @@ struct integrity_iint_cache *integrity_iint_find(struct inode *inode);
+ int integrity_digsig_verify(const unsigned int id, const char *sig, int siglen,
+ 			    const char *digest, int digestlen);
+ 
++int integrity_digsig_verify_keyring(struct key *keyring, const char *sig,
++			int siglen, const char *digest, int digestlen);
++
++extern int integrity_get_digsig_size(char *sig);
++extern int integrity_digsig_get_hash_algo(char *sig);
+ int integrity_init_keyring(const unsigned int id);
+ #else
+ 
++
++static inline int integrity_digsig_get_hash_algo(char *sig)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline int integrity_digsig_verify(const unsigned int id,
+ 					  const char *sig, int siglen,
+ 					  const char *digest, int digestlen)
+@@ -140,10 +146,18 @@ static inline int integrity_digsig_verify(const unsigned int id,
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline int integrity_digsig_verify_keyring(struct key *keyring,
++			const char *sig, int siglen, const char *digest,
++			int digestlen)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline int integrity_init_keyring(const unsigned int id)
+ {
+ 	return 0;
+ }
++static inline int integrity_get_digsig_size(char *sig) { return -EOPNOTSUPP; }
+ #endif /* CONFIG_INTEGRITY_SIGNATURE */
+ 
+ #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
+diff --git a/security/keys/compat.c b/security/keys/compat.c
+index 347896548ad..946a5cddf1e 100644
+--- a/security/keys/compat.c
++++ b/security/keys/compat.c
+@@ -15,6 +15,31 @@
+ #include <linux/slab.h>
+ #include "internal.h"
+ 
++struct compat_keyctl_sig_data {
++	compat_uptr_t data;
++	compat_size_t datalen;
++	compat_uptr_t sig;
++	compat_size_t siglen;
++	compat_ulong_t sig_type;
++	compat_ulong_t keyring_id;
++	compat_ulong_t flags;
++};
++
++static long compat_keyctl_verify_signature(const void __user *_sig_data)
++{
++	struct compat_keyctl_sig_data csig_data;
++	int result;
++
++	result = copy_from_user(&csig_data, _sig_data, sizeof(csig_data));
++	if (result)
++		return -EFAULT;
++
++	return __keyctl_verify_signature(csig_data.keyring_id,
++		compat_ptr(csig_data.data), csig_data.datalen,
++			compat_ptr(csig_data.sig), csig_data.siglen,
++			csig_data.sig_type, csig_data.flags);
++}
++
+ /*
+  * Instantiate a key with the specified compatibility multipart payload and
+  * link the key into the destination keyring if one is given.
+@@ -141,6 +166,10 @@ COMPAT_SYSCALL_DEFINE5(keyctl, u32, option,
+ 	case KEYCTL_GET_PERSISTENT:
+ 		return keyctl_get_persistent(arg2, arg3);
+ 
++	case KEYCTL_VERIFY_SIGNATURE:
++		return compat_keyctl_verify_signature(compat_ptr(arg2));
++
++
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 200e3786733..99c6509eae1 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -246,6 +246,9 @@ extern long keyctl_invalidate_key(key_serial_t);
+ extern long keyctl_instantiate_key_common(key_serial_t,
+ 					  const struct iovec *,
+ 					  unsigned, size_t, key_serial_t);
++
++extern long keyctl_verify_signature(const void __user *_sig_data);
++extern long __keyctl_verify_signature(key_serial_t keyring_id, void __user *_data, size_t dlen, void __user *_sig, size_t siglen, unsigned long sig_type, unsigned long flags);
+ #ifdef CONFIG_PERSISTENT_KEYRINGS
+ extern long keyctl_get_persistent(uid_t, key_serial_t);
+ extern unsigned persistent_keyring_expiry;
+diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
+index 4743d71e4aa..8a57ce84a50 100644
+--- a/security/keys/keyctl.c
++++ b/security/keys/keyctl.c
+@@ -23,9 +23,14 @@
+ #include <linux/vmalloc.h>
+ #include <linux/security.h>
+ #include <linux/uio.h>
++#include <linux/ima.h>
++#include <keys/system_keyring.h>
+ #include <asm/uaccess.h>
+ #include "internal.h"
+ 
++
++#define KEY_SEARCH		217
++
+ #define KEY_MAX_DESC_SIZE 4096
+ 
+ static int key_get_type_from_user(char *type,
+@@ -1577,6 +1582,80 @@ error_keyring:
+ 	return ret;
+ }
+ 
++long __keyctl_verify_signature(key_serial_t keyring_id, void __user *_data,
++				size_t dlen, void __user *_sig, size_t siglen,
++				unsigned long sig_type, unsigned long flags)
++{
++	void *sig;
++	long ret;
++	key_ref_t keyring_ref;
++
++	pr_devel("-->keyctl_verify_signature(,%zu,,%zu,%lu)\n",
++			dlen, siglen, sig_type);
++
++	if (!_data || !dlen || !_sig || !siglen || !keyring_id)
++		return -EINVAL;
++	/*
++	 * Possibly various signature handlers could scan signature and
++	 * claim it belongs to them and verify.
++	 */
++	if (sig_type == KEYCTL_SIG_TYPE_UNKNOWN)
++		return -EOPNOTSUPP;
++
++	/* Get the keyring which should be used */
++	keyring_ref = lookup_user_key(keyring_id, 0, KEY_SEARCH);
++	if (IS_ERR(keyring_ref))
++		return PTR_ERR(keyring_ref);
++
++
++	ret = -ENOMEM;
++	sig = kmalloc(siglen, GFP_KERNEL);
++	if (!sig)
++		goto error_keyref_put;
++
++	ret = -EFAULT;
++	if (copy_from_user(sig, _sig, siglen) != 0)
++		goto error_free_sig;
++
++	switch(sig_type) {
++	case KEYCTL_SIG_TYPE_INTEGRITY_DIGSIG:
++		ret = integrity_verify_user_buffer_digsig(
++					key_ref_to_ptr(keyring_ref),
++					_data, dlen, sig, siglen);
++		break;
++	default:
++		ret = -EINVAL;
++		break;
++	}
++error_free_sig:
++	kfree(sig);
++error_keyref_put:
++	key_ref_put(keyring_ref);
++	return ret;
++}
++
++/*
++ * Use a key to verify a signature.
++ *
++ * The key argument gives a key to use or a keyring in which a suitable key
++ * might be found.  The signature will be examined and an attempt will be made
++ * to determine the key to use from the information contained therein.
++ */
++long keyctl_verify_signature(const void __user *_sig_data)
++{
++	struct keyctl_sig_data sig_data;
++	int result;
++
++	result = copy_from_user(&sig_data, _sig_data, sizeof(sig_data));
++	if (result)
++		return -EFAULT;
++
++	return __keyctl_verify_signature(sig_data.keyring_id, sig_data.data,
++				sig_data.datalen, sig_data.sig, sig_data.siglen,
++				sig_data.sig_type, sig_data.flags);
++
++}
++
+ /*
+  * The key control system call
+  */
+@@ -1683,6 +1762,10 @@ SYSCALL_DEFINE5(keyctl, int, option, unsigned long, arg2, unsigned long, arg3,
+ 	case KEYCTL_GET_PERSISTENT:
+ 		return keyctl_get_persistent((uid_t)arg2, (key_serial_t)arg3);
+ 
++ 
++	case KEYCTL_VERIFY_SIGNATURE:
++		return keyctl_verify_signature((const void __user *)arg2);
++
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
