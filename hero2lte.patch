@@ -1,0 +1,316 @@
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+old mode 100644
+new mode 100755
+diff --git a/arch/arm64/configs/exynos8890-hero2lte_defconfig b/arch/arm64/configs/exynos8890-hero2lte_defconfig
+index 9e28a0ca149..d1650867ffa 100755
+--- a/arch/arm64/configs/exynos8890-hero2lte_defconfig
++++ b/arch/arm64/configs/exynos8890-hero2lte_defconfig
+@@ -231,7 +231,14 @@ CONFIG_COMPAT_OLD_SIGACTION=y
+ CONFIG_HAVE_GENERIC_DMA_COHERENT=y
+ CONFIG_RT_MUTEXES=y
+ CONFIG_BASE_SMALL=0
+-# CONFIG_MODULES is not set
++CONFIG_MODULES=y
++CONFIG_MODULE_FORCE_LOAD=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_MODULE_FORCE_UNLOAD=y
++# CONFIG_MODVERSIONS is not set
++# CONFIG_MODULE_SRCVERSION_ALL is not set
++# CONFIG_MODULE_SIG is not set
++# CONFIG_MODULE_COMPRESS is not set
+ CONFIG_STOP_MACHINE=y
+ CONFIG_BLOCK=y
+ # CONFIG_BLK_DEV_BSG is not set
+@@ -924,6 +931,7 @@ CONFIG_XPS=y
+ # CONFIG_CGROUP_NET_CLASSID is not set
+ CONFIG_NET_RX_BUSY_POLL=y
+ CONFIG_BQL=y
++# CONFIG_BPF_JIT is not set
+ CONFIG_NET_FLOW_LIMIT=y
+ 
+ #
+@@ -1965,6 +1973,7 @@ CONFIG_HAVE_S3C2410_I2C=y
+ #
+ # Other I2C/SMBus bus drivers
+ #
++# CONFIG_I2C_STUB is not set
+ # CONFIG_I2C_DEBUG_CORE is not set
+ # CONFIG_I2C_DEBUG_ALGO is not set
+ # CONFIG_I2C_DEBUG_BUS is not set
+@@ -3618,11 +3627,15 @@ CONFIG_DMA_OF=y
+ #
+ CONFIG_STAGING=y
+ # CONFIG_PRISM2_USB is not set
++# CONFIG_COMEDI is not set
++# CONFIG_RTL8192U is not set
++# CONFIG_RTLLIB is not set
+ # CONFIG_R8712U is not set
+ # CONFIG_R8188EU is not set
+ # CONFIG_R8723AU is not set
+ # CONFIG_RTS5208 is not set
+ # CONFIG_LINE6_USB is not set
++# CONFIG_VT6655 is not set
+ 
+ #
+ # IIO staging drivers
+@@ -3746,6 +3759,8 @@ CONFIG_ION_EXYNOS_OF=y
+ # CONFIG_FIQ_WATCHDOG is not set
+ # CONFIG_USB_WPAN_HCD is not set
+ # CONFIG_WIMAX_GDM72XX is not set
++# CONFIG_LTE_GDM724X is not set
++# CONFIG_LUSTRE_FS is not set
+ # CONFIG_DGNC is not set
+ # CONFIG_DGAP is not set
+ # CONFIG_GS_FPGABOOT is not set
+@@ -4572,11 +4587,16 @@ CONFIG_BRANCH_PROFILE_NONE=y
+ # CONFIG_TEST_LIST_SORT is not set
+ # CONFIG_BACKTRACE_SELF_TEST is not set
+ # CONFIG_RBTREE_TEST is not set
++# CONFIG_INTERVAL_TREE_TEST is not set
++# CONFIG_PERCPU_TEST is not set
+ CONFIG_ATOMIC64_SELFTEST=y
+ # CONFIG_TEST_STRING_HELPERS is not set
+ # CONFIG_TEST_KSTRTOX is not set
+ # CONFIG_TEST_RHASHTABLE is not set
+ # CONFIG_DMA_API_DEBUG is not set
++# CONFIG_TEST_LKM is not set
++# CONFIG_TEST_USER_COPY is not set
++# CONFIG_TEST_BPF is not set
+ # CONFIG_TEST_FIRMWARE is not set
+ # CONFIG_TEST_UDELAY is not set
+ # CONFIG_SAMPLES is not set
+@@ -4586,6 +4606,7 @@ CONFIG_HAVE_ARCH_KGDB=y
+ # CONFIG_STRICT_DEVMEM is not set
+ # CONFIG_PID_IN_CONTEXTIDR is not set
+ # CONFIG_ARM64_RANDOMIZE_TEXT_OFFSET is not set
++# CONFIG_DEBUG_SET_MODULE_RONX is not set
+ # CONFIG_DEBUG_RODATA is not set
+ 
+ #
+@@ -4651,6 +4672,7 @@ CONFIG_CRYPTO_WORKQUEUE=y
+ CONFIG_CRYPTO_CRYPTD=y
+ # CONFIG_CRYPTO_MCRYPTD is not set
+ CONFIG_CRYPTO_AUTHENC=y
++# CONFIG_CRYPTO_TEST is not set
+ CONFIG_CRYPTO_ABLK_HELPER=y
+ 
+ #
+diff --git a/drivers/bluetooth/bcm4358.c b/drivers/bluetooth/bcm4358.c
+index f164de274e3..3e61073ab4e 100644
+--- a/drivers/bluetooth/bcm4358.c
++++ b/drivers/bluetooth/bcm4358.c
+@@ -77,7 +77,6 @@ struct bcm_bt_gpio {
+ 
+ int idle_ip_index;
+ 
+-EXPORT_SYMBOL(check_bt_op);
+ 
+ static int bcm4358_bt_rfkill_set_power(void *data, bool blocked)
+ {
+diff --git a/drivers/bluetooth/bcm4359.c b/drivers/bluetooth/bcm4359.c
+index 4fbf8ec3701..91412fbb6e8 100644
+--- a/drivers/bluetooth/bcm4359.c
++++ b/drivers/bluetooth/bcm4359.c
+@@ -77,7 +77,6 @@ struct bcm_bt_gpio {
+ 
+ int idle_ip_index;
+ 
+-EXPORT_SYMBOL(check_bt_op);
+ 
+ static int bcm4359_bt_rfkill_set_power(void *data, bool blocked)
+ {
+diff --git a/drivers/fingerprint/fingerprint.h b/drivers/fingerprint/fingerprint.h
+index 2a0db89042c..3eaa3e56055 100755
+--- a/drivers/fingerprint/fingerprint.h
++++ b/drivers/fingerprint/fingerprint.h
+@@ -59,7 +59,6 @@ extern bool fp_lockscreen_mode;
+ /* input/Keyboard/gpio_keys.c */
+ extern bool wakeup_by_key(void);
+ /* export variable for signaling */
+-EXPORT_SYMBOL(fp_lockscreen_mode);
+ #endif
+ #endif
+ 
+diff --git a/drivers/fingerprint/vfs7xxx.c b/drivers/fingerprint/vfs7xxx.c
+index 9c8775049ec..daaf24e14e1 100755
+--- a/drivers/fingerprint/vfs7xxx.c
++++ b/drivers/fingerprint/vfs7xxx.c
+@@ -200,6 +200,7 @@ int FP_CHECK = 0; /* extern variable init */
+ 
+ int vfsspi_goto_suspend = 0;
+ bool fp_lockscreen_mode = false;
++EXPORT_SYMBOL(fp_lockscreen_mode);
+ 
+ #define VENDOR         "SYNAPTICS"
+ #define CHIP_ID                "VIPER"
+diff --git a/drivers/staging/samsung/sec_upload.c b/drivers/staging/samsung/sec_upload.c
+index 08d3edc62c0..e352047f756 100644
+--- a/drivers/staging/samsung/sec_upload.c
++++ b/drivers/staging/samsung/sec_upload.c
+@@ -229,4 +229,4 @@ void check_crash_keys_in_user(unsigned int code, int state)
+                }
+        }
+ }
+-EXPORT_SYMBOL(check_crash_keys_in_user)
++EXPORT_SYMBOL(check_crash_keys_in_user);
+diff --git a/fs/Kconfig.binfmt b/fs/Kconfig.binfmt
+old mode 100644
+new mode 100755
+index 370b24cee4d..9112ae3ed6c
+--- a/fs/Kconfig.binfmt
++++ b/fs/Kconfig.binfmt
+@@ -23,6 +23,18 @@ config BINFMT_ELF
+          ld.so (check the file <file:Documentation/Changes> for location and
+          latest version).
+ 
++
++config BINFMT_ELF_SIG
++       bool "ELF binary signature verification"
++       depends on BINFMT_ELF
++       depends on INTEGRITY_ASYMMETRIC_KEYS
++       depends on IMA_APPRAISE
++       depends on SYSTEM_TRUSTED_KEYRING
++       default n
++       ---help---
++         Check ELF binary signature verfication.
++
++
+ config COMPAT_BINFMT_ELF
+        bool
+        depends on COMPAT && BINFMT_ELF
+diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
+old mode 100644
+new mode 100755
+index 3dd249787b1..3596fa10dc6
+--- a/fs/binfmt_elf.c
++++ b/fs/binfmt_elf.c
+@@ -34,6 +34,8 @@
+ #include <linux/utsname.h>
+ #include <linux/coredump.h>
+ #include <linux/sched.h>
++#include <linux/ima.h>
++#include <keys/system_keyring.h>
+ #include <asm/uaccess.h>
+ #include <asm/param.h>
+ #include <asm/page.h>
+@@ -569,6 +571,38 @@ static unsigned long randomize_stack_top(unsigned long stack_top)
+ #endif
+ }
+ 
++
++
++#ifdef CONFIG_BINFMT_ELF_SIG
++static bool ptraced_by_unsafe_tracer(void)
++{
++       struct task_struct *child = current, *parent;
++       bool ret = false;
++       const struct cred *tcred;
++
++       read_lock(&tasklist_lock);
++
++       if (!child->ptrace) {
++               ret = false;
++               goto out;
++       }
++
++       parent = child->parent;
++       rcu_read_lock();
++       tcred = __task_cred(parent);
++       if (!tcred->proc_signed)
++               ret = true;
++       rcu_read_unlock();
++
++
++       if (!test_bit(MMF_VM_LOCKED, &parent->mm->flags))
++               ret = true;
++
++out:
++       read_unlock(&tasklist_lock);
++       return ret;
++}
++#endif
+ static int load_elf_binary(struct linux_binprm *bprm)
+ {
+        struct file *interpreter = NULL; /* to shut gcc up */
+@@ -586,6 +620,12 @@ static int load_elf_binary(struct linux_binprm *bprm)
+        unsigned long reloc_func_desc __maybe_unused = 0;
+        int executable_stack = EXSTACK_DEFAULT;
+        struct pt_regs *regs = current_pt_regs();
++
++       char *signature = NULL;
++#ifdef CONFIG_BINFMT_ELF_SIG
++       unsigned int siglen = 0;
++       bool mlock_mappings = false;
++#endif
+        struct {
+                struct elfhdr elf_ex;
+                struct elfhdr interp_elf_ex;
+@@ -724,6 +764,37 @@ static int load_elf_binary(struct linux_binprm *bprm)
+        if (retval)
+                goto out_free_dentry;
+ 
++
++#ifdef CONFIG_BINFMT_ELF_SIG
++
++       retval = ima_file_signature_alloc(bprm->file, &signature);
++
++       if (retval < 0 && retval != -ENODATA && retval != -EOPNOTSUPP)
++               goto out_free_dentry;
++
++       if (signature != NULL) {
++               siglen = retval;
++               retval = ima_signature_type(signature);
++               if (retval == EVM_IMA_XATTR_DIGSIG &&
++                   ima_memlock_file(signature, siglen)) {
++
++                       retval = ima_appraise_file_digsig(
++                                       system_trusted_keyring,
++                                       bprm->file, signature, siglen);
++                       if (retval) {
++                               send_sig(SIGKILL, current, 0);
++                               goto out_free_dentry;
++                       }
++
++                       mlock_mappings = true;
++                       current->mm->def_flags |= VM_LOCKED;
++                       set_bit(MMF_VM_LOCKED, &current->mm->flags);
++               }
++       }
++#endif
++
++
++
+        /* Do this immediately, since STACK_TOP as used in setup_arg_pages
+           may depend on the personality.  */
+        SET_PERSONALITY(loc->elf_ex);
+@@ -892,6 +963,22 @@ static int load_elf_binary(struct linux_binprm *bprm)
+                goto out_free_dentry;
+        }
+ 
++
++#ifdef CONFIG_BINFMT_ELF_SIG
++       if (mlock_mappings) {
++
++               retval = ima_appraise_file_digsig(system_trusted_keyring,
++                                       bprm->file, signature, siglen);
++               if (retval) {
++                       send_sig(SIGKILL, current, 0);
++                       goto out_free_dentry;
++               }
++
++if (!ptraced_by_unsafe_tracer() && !elf_interpreter)
++                       bprm->cred->proc_signed = true;
++       }
++#endif
++
+        if (elf_interpreter) {
+                unsigned long interp_map_addr = 0;
+ 
+@@ -984,6 +1071,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+        retval = 0;
+ out:
+        kfree(loc);
++kfree(signature);
+ out_ret:
+        return retval;
+
